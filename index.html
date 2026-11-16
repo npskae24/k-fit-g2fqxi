@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0f5c4a">
+<title>K-Fit บันทึกฟิตเนส</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<style>
+:root{--bg:#f5f7f6;--card:#fff;--tx:#1b1f24;--mu:#5b6573;--ac:#e4572e;--ac2:#0f5c4a;--bd:#e3e6ea;--chip:#edf2f0;--ok:#1f9d6b;--hi:#e4572e;--bar:#7fb8a6;--nd:#d6dbe0;--warn:#fff4e5;--warnb:#f0b35a}
+@media (prefers-color-scheme:dark){:root:not(.light){--bg:#0f1413;--card:#18201e;--tx:#e8ecf0;--mu:#9aa6b2;--ac:#ff7a50;--ac2:#6fd3b2;--bd:#2a3532;--chip:#22302c;--ok:#3ccf91;--hi:#ff7a50;--bar:#3f8a74;--nd:#33403c;--warn:#2b2414;--warnb:#9a6a1c}}
+:root.dark{--bg:#0f1413;--card:#18201e;--tx:#e8ecf0;--mu:#9aa6b2;--ac:#ff7a50;--ac2:#6fd3b2;--bd:#2a3532;--chip:#22302c;--ok:#3ccf91;--hi:#ff7a50;--bar:#3f8a74;--nd:#33403c;--warn:#2b2414;--warnb:#9a6a1c}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.55 system-ui,-apple-system,"Segoe UI","Noto Sans Thai","Sarabun",sans-serif;overflow-x:hidden}
+a{color:var(--ac2);word-break:break-word}
+header{background:linear-gradient(135deg,#0f5c4a,#2e8b6e);color:#fff;padding:14px 14px 12px}
+.top{display:flex;align-items:center;gap:8px;justify-content:space-between}
+.logo{width:34px;height:34px;border-radius:8px;flex:none}
+.ver{font-size:12px;background:rgba(255,255,255,.18);padding:2px 8px;border-radius:99px;text-decoration:none;color:#fff}
+#modeBtn{background:rgba(255,255,255,.18);border:0;color:#fff;border-radius:99px;padding:4px 10px;font-size:13px}
+.site{font-size:22px;font-weight:800;margin:8px 0 2px}
+header p{margin:2px 0;font-size:13px;opacity:.92}
+nav{position:sticky;top:0;z-index:9;background:var(--card);border-bottom:1px solid var(--bd);display:flex;gap:6px;overflow-x:auto;padding:8px 10px;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav a{flex:none;text-decoration:none;color:var(--tx);background:var(--chip);padding:5px 11px;border-radius:99px;font-size:13.5px;white-space:nowrap}
+nav a.on{background:var(--ac2);color:var(--card)}
+main{max-width:720px;margin:0 auto;padding:10px}
+section{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:12px 13px;margin:10px 0;scroll-margin-top:56px;min-width:0}
+h2{font-size:17px;margin:0 0 8px}
+h3{font-size:15px;margin:10px 0 4px}
+ul{margin:4px 0;padding-left:20px}
+.mu{color:var(--mu);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.kpi{background:var(--chip);border-radius:10px;padding:8px 10px;min-width:0}
+.kpi b{display:block;font-size:20px;font-variant-numeric:tabular-nums;color:var(--ac2);line-height:1.2}
+.kpi span{font-size:12.5px;color:var(--mu)}
+.seg{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0 8px}
+.seg button,.btn{border:1px solid var(--bd);background:var(--chip);color:var(--tx);border-radius:99px;padding:4px 12px;font:inherit;font-size:13.5px;cursor:pointer}
+.seg button.on{background:var(--ac2);color:var(--card);border-color:var(--ac2)}
+.btn.pri{background:var(--ac2);color:var(--card);border-color:var(--ac2)}
+svg.ch{display:block;width:100%;height:auto;touch-action:pan-y}
+.tip{font-size:13px;min-height:20px;font-variant-numeric:tabular-nums}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+td,th{border-bottom:1px solid var(--bd);padding:5px 4px;text-align:left;vertical-align:top}
+th{font-size:12.5px;color:var(--mu);font-weight:600}
+td.r,th.r{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.tw{overflow-x:auto}
+.hi{color:var(--hi);font-weight:700}
+.pill{display:inline-block;font-size:12px;border-radius:6px;padding:0 6px;background:var(--chip);white-space:nowrap}
+.pill.hi{background:var(--hi);color:#fff;font-weight:600}
+.bar{height:8px;border-radius:4px;background:var(--bar)}
+.day{border-top:1px dashed var(--bd);padding:7px 0}
+.day:first-child{border-top:0}
+.day .dh{display:flex;justify-content:space-between;gap:6px;font-weight:700}
+.day.today .dh{color:var(--ac)}
+.day label{display:flex;gap:8px;align-items:flex-start;font-size:14px;margin:3px 0;cursor:pointer}
+.day input{width:20px;height:20px;flex:none;margin:1px 0 0;accent-color:var(--ok)}
+.auto{font-size:11.5px;color:var(--ok);white-space:nowrap}
+.prog{height:10px;background:var(--chip);border-radius:6px;overflow:hidden;margin:4px 0}
+.prog i{display:block;height:100%;background:var(--ok)}
+form .row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+input[type=date],input[type=number],select{width:100%;min-width:0;font:inherit;font-size:15px;padding:6px 7px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx)}
+label.f{font-size:12.5px;color:var(--mu);display:block;min-width:0}
+details{border:1px solid var(--bd);border-radius:10px;padding:6px 10px;margin:8px 0}
+summary{cursor:pointer;font-weight:600}
+.box{background:var(--chip);border-radius:10px;padding:8px 10px;margin:6px 0;font-size:14px}
+.warn{background:var(--warn);border:1px solid var(--warnb);border-radius:10px;padding:6px 10px;font-size:13px;margin:6px 0}
+.del{border:0;background:none;color:var(--mu);font-size:16px;cursor:pointer;padding:0 4px}
+footer{text-align:center;color:var(--mu);font-size:12px;padding:16px 10px 40px}
+.lg{display:flex;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--mu)}
+.lg i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+</style>
+</head>
+<body>
+<header>
+ <div class="top">
+  <img class="logo" src="icons/icon-192.png" alt="">
+  <a class="ver" id="verLbl" href="#ver">v1.0 · 16 พ.ย. 2026</a>
+  <button id="modeBtn" aria-label="สลับโหมดมืด">🌓</button>
+ </div>
+ <div class="site">K-Fit บันทึกฟิตเนส</div>
+ <p>🎯 ลดไขมัน (โดยเฉพาะพุง) · รักษากล้าม · 12 สัปดาห์ เริ่ม 16 พ.ย. 2026</p>
+ <p id="hdrData" class="mu" style="color:#fff;opacity:.85"></p>
+</header>
+<nav id="nav">
+ <a href="#sum">สรุป</a><a href="#plan">ตารางสัปดาห์</a><a href="#cal">แคลอรี่</a><a href="#avg">ค่าเฉลี่ย</a><a href="#body">น้ำหนัก/เอว</a><a href="#wo">ออกกำลังกาย</a><a href="#add">บันทึกเอง</a><a href="#ver">เวอร์ชัน</a>
+</nav>
+<main id="app">
+<section id="sum"><h2>สรุป</h2><div id="sumBody" class="mu">กำลังโหลดข้อมูล…</div></section>
+
+<section id="plan"><h2>ตารางซ้อมสัปดาห์นี้</h2>
+ <div class="seg"><button type="button" id="wkPrev">‹ ก่อนหน้า</button><button type="button" id="wkNow">สัปดาห์นี้</button><button type="button" id="wkNext">ถัดไป ›</button></div>
+ <div id="wkHead"></div><div id="wkDays"></div>
+ <p class="mu">ติ๊กเก็บไว้ในเครื่องนี้ (แยกรายสัปดาห์) · <span class="auto">✓ นาฬิกา</span> = เจอการออกกำลังกายในข้อมูล ติ๊กให้อัตโนมัติ · ถ้าไม่ว่าง ตัดคาร์ดิโอก่อน เวทไว้ก่อน</p>
+</section>
+
+<section id="cal"><h2>แคลอรี่จากการเคลื่อนไหว (Active kcal)</h2>
+ <div class="seg" id="calRange"><button type="button" data-n="30">30 วัน</button><button type="button" data-n="60">60 วัน</button><button type="button" data-n="90">90 วัน</button><button type="button" data-n="365">1 ปี</button></div>
+ <div id="calStats" class="grid"></div>
+ <svg class="ch" id="calChart" viewBox="0 0 360 190" role="img" aria-label="กราฟแคลอรี่รายวัน"></svg>
+ <div class="tip" id="calTip">แตะที่แท่งเพื่อดูค่า</div>
+ <div class="lg"><span><i style="background:var(--bar)"></i>ต่ำกว่า 900</span><span><i style="background:var(--hi)"></i>900 ขึ้นไป</span><span><i style="background:var(--ac2);height:2px"></i>ค่าเฉลี่ย</span></div>
+ <h3>วันที่ถึง 900 kcal</h3><div id="calList"></div>
+</section>
+
+<section id="avg"><h2>ค่าเฉลี่ยรายสัปดาห์ / รายเดือน</h2>
+ <div class="seg" id="avgMode"><button type="button" data-m="w" class="on">รายสัปดาห์</button><button type="button" data-m="m">รายเดือน</button></div>
+ <div class="tw" id="avgTbl"></div>
+ <p class="mu">เฉลี่ยเฉพาะวันที่มีข้อมูลจาก Apple Watch</p>
+</section>
+
+<section id="body"><h2>น้ำหนัก และรอบเอว</h2>
+ <svg class="ch" id="wChart" viewBox="0 0 360 170" role="img" aria-label="กราฟน้ำหนัก"></svg>
+ <div class="lg"><span><i style="background:var(--ac2)"></i>Apple Health</span><span><i style="background:var(--ac)"></i>InBody</span><span><i style="background:var(--ok)"></i>บันทึกเอง</span></div>
+ <h3>รอบเอว (ซม.)</h3>
+ <svg class="ch" id="waChart" viewBox="0 0 360 140" role="img" aria-label="กราฟรอบเอว"></svg>
+ <div id="waNote" class="mu"></div>
+ <div id="inbody"></div>
+ <details><summary>ตารางน้ำหนักทั้งหมด</summary><div class="tw" id="bodyTbl"></div></details>
+</section>
+
+<section id="wo"><h2>บันทึกการออกกำลังกาย</h2>
+ <div class="row" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px">
+  <label class="f">ประเภท<select id="woType"></select></label>
+  <label class="f">ช่วงเวลา<select id="woYear"></select></label>
+ </div>
+ <div id="woSum" class="mu" style="margin:6px 0"></div>
+ <div class="tw" id="woTbl"></div>
+ <button type="button" class="btn" id="woMore" style="margin-top:8px">แสดงเพิ่ม</button>
+</section>
+
+<section id="add"><h2>บันทึกน้ำหนัก / รอบเอวเอง</h2>
+ <form id="fAdd">
+  <div class="row">
+   <label class="f">วันที่<input type="date" id="fD" required></label>
+   <label class="f">น้ำหนัก (กก.)<input type="number" id="fKg" step="0.05" min="30" max="200" inputmode="decimal" placeholder="77.7"></label>
+   <label class="f">รอบเอว (ซม.)<input type="number" id="fCm" step="0.1" min="40" max="200" inputmode="decimal" placeholder="92"></label>
+  </div>
+  <p class="mu" style="margin:4px 0">ชั่งตอนตื่นนอน หลังเข้าห้องน้ำ ก่อนกินดื่ม · วัดเอวระดับสะดือ หายใจออกสบาย ๆ</p>
+  <button class="btn pri" type="submit">บันทึก</button> <span id="fMsg" class="mu"></span>
+ </form>
+ <div class="tw" id="manTbl" style="margin-top:8px"></div>
+ <h3>สำรองข้อมูล</h3>
+ <p class="mu" style="margin:2px 0">ข้อมูลที่บันทึกเอง (น้ำหนัก เอว และติ๊กตาราง) อยู่ในเบราว์เซอร์เครื่องนี้เท่านั้น ควรกดสำรองไว้เป็นระยะ</p>
+ <div class="seg"><button type="button" class="btn" id="bExp">⬇️ ส่งออก JSON</button><label class="btn" style="display:inline-block">⬆️ นำเข้า JSON<input type="file" id="bImp" accept="application/json,.json" hidden></label></div>
+</section>
+
+<section id="ver"><h2>เวอร์ชัน</h2>
+ <div class="box">ปัจจุบัน <b>v1.0</b> · ข้อมูลจาก Apple Health ส่งออก 15 พ.ย. 2026 (ครบถึง 14 พ.ย.)</div>
+ <details><summary>บันทึกการเปลี่ยนแปลง</summary>
+  <ul>
+   <li><b>v1.0 · 16 พ.ย. 2026</b> — เวอร์ชันแรก: กราฟแคลอรี่รายวัน (เน้นวัน 900+), ค่าเฉลี่ยรายสัปดาห์/เดือน, น้ำหนัก + InBody 15 พ.ย., บันทึกการออกกำลังกาย, ตารางซ้อม จ/พ/ศ เวท + เดินชัน, อ/ส วิ่งสลับเดิน, ฟอร์มบันทึกน้ำหนัก/เอว + สำรอง JSON, ใช้งานออฟไลน์ได้</li>
+  </ul>
+ </details>
+ <p class="mu">อัปเดตข้อมูล: ส่งออก Apple Health ใหม่ แล้วรัน <code>tools/extract.py</code> สร้าง <code>data.json</code></p>
+</section>
+</main>
+<footer>ข้อมูลสุขภาพส่วนตัว · ไม่ใช่คำแนะนำทางการแพทย์<br>ไม่มีเซิร์ฟเวอร์ ข้อมูลที่บันทึกเองอยู่ในเครื่องนี้เท่านั้น</footer>
+<script>
+(function(){
+"use strict";
+var VER="v1.0";
+var MO=["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
+var DW=["อา.","จ.","อ.","พ.","พฤ.","ศ.","ส."];
+var HI=900, PLAN_START="2026-11-16";
+var TYPE={Running:"🏃 วิ่ง",Walking:"🚶 เดิน",Hiking:"🥾 เดินป่า",TraditionalStrengthTraining:"🏋️ เวท",FunctionalStrengthTraining:"🏋️ เวทฟังก์ชัน",CoreTraining:"🧘 แกนกลาง",HighIntensityIntervalTraining:"🔥 HIIT",Cycling:"🚴 ปั่นจักรยาน",Swimming:"🏊 ว่ายน้ำ",Pilates:"🤸 พิลาทิส",Elliptical:"⚙️ เครื่องเดินวงรี",Pickleball:"🏓 พิกเกิลบอล",Tennis:"🎾 เทนนิส",TableTennis:"🏓 ปิงปอง",Badminton:"🏸 แบดมินตัน",CardioDance:"💃 เต้น",Other:"• อื่น ๆ"};
+var GROUP={run:["Running"],str:["TraditionalStrengthTraining","FunctionalStrengthTraining","CoreTraining","HighIntensityIntervalTraining"],walk:["Walking","Hiking"]};
+var SRC={watch:"Apple Watch",garmin:"Garmin",strava:"Strava",whoop:"WHOOP",manual:"บันทึกเอง",other:"อื่น ๆ"};
+var $=function(id){return document.getElementById(id);};
+var fmt=function(n,d){return (d?Number(n).toFixed(d):Math.round(n)).toString().replace(/\B(?=(\d{3})+(?!\d))/g,",");};
+function pd(s){var p=s.split("-");return new Date(+p[0],+p[1]-1,+p[2]);}
+function ds(d){return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2);}
+function addD(s,n){var d=pd(s);d.setDate(d.getDate()+n);return ds(d);}
+function th(s,y){var d=pd(s);return d.getDate()+" "+MO[d.getMonth()]+(y?" "+(String(d.getFullYear()).slice(2)):"");}
+function thw(s){return DW[pd(s).getDay()]+" "+th(s);}
+function monday(s){var d=pd(s);var k=(d.getDay()+6)%7;d.setDate(d.getDate()-k);return ds(d);}
+function isoWeek(s){var d=pd(s);d.setDate(d.getDate()+3-((d.getDay()+6)%7));var y=d.getFullYear();var w1=new Date(y,0,4);return y+"-W"+("0"+(1+Math.round(((d-w1)/864e5-3+((w1.getDay()+6)%7))/7))).slice(-2);}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+function ls(k,v){try{if(v===undefined){var x=localStorage.getItem(k);return x?JSON.parse(x):null;}localStorage.setItem(k,JSON.stringify(v));}catch(e){return null;}}
+var TODAY=ds(new Date());
+
+var D=null, DAY={}, WO=[];
+function manual(){return ls("kfit-body")||[];}
+
+function load(){
+ fetch("data.json").then(function(r){return r.json();}).then(function(j){D=j;init();}).catch(function(e){$("sumBody").textContent="โหลดข้อมูลไม่ได้ ("+e+")";});
+}
+function init(){
+ D.daily.forEach(function(r){DAY[r[0]]={k:r[1],s:r[2],e:r[3]};});
+ WO=D.workouts.concat(D.manual.map(function(m){var x=Object.assign({},m);x.src="manual";return x;}));
+ WO.sort(function(a,b){return (b.d+b.t)<(a.d+a.t)?-1:1;});
+ $("hdrData").textContent="ข้อมูล Apple Watch "+th(D.daily[0][0],1)+" – "+th(D.exportLastFullDay,1)+" · ออกกำลังกาย "+fmt(D.workouts.length)+" ครั้ง";
+ renderSum(); renderCal(60); renderAvg("w"); renderBody(); initWo(); renderPlan(0); renderMan();
+}
+
+/* ---------- summary ---------- */
+function rangeDays(end,n){var out=[];for(var i=n-1;i>=0;i--){var d=addD(end,-i);out.push([d,DAY[d]]);}return out;}
+function stat(arr){var v=arr.filter(function(x){return x[1]&&x[1].k>0;});var s=v.reduce(function(a,x){return a+x[1].k;},0);return {n:v.length,avg:v.length?s/v.length:0,hi:v.filter(function(x){return x[1].k>=HI;})};}
+function renderSum(){
+ var end=D.exportLastFullDay, s30=stat(rangeDays(end,30)), s60=stat(rangeDays(end,60));
+ var ib=D.inbody[D.inbody.length-1];
+ var m=manual().filter(function(x){return x.kg;}).sort(function(a,b){return a.d<b.d?-1:1;});
+ var lastW=m.length?m[m.length-1]:null;
+ var h='<div class="grid">'+
+  '<div class="kpi"><b>'+fmt(s30.avg)+'</b><span>kcal/วัน เฉลี่ย 30 วันล่าสุด</span></div>'+
+  '<div class="kpi"><b>'+s60.hi.length+' วัน</b><span>ถึง 900 kcal ใน 60 วันล่าสุด</span></div>';
+ if(ib)h+='<div class="kpi"><b>'+ib.kg+' กก.</b><span>InBody '+th(ib.date.slice(0,10),1)+' · ไขมัน '+ib.pbf+'%</span></div>'+
+  '<div class="kpi"><b>'+ib.smm+' กก.</b><span>กล้ามเนื้อ · ไขมันช่องท้องระดับ '+ib.visceral+'</span></div>';
+ if(lastW)h+='<div class="kpi"><b>'+lastW.kg+' กก.</b><span>ล่าสุดที่บันทึกเอง '+th(lastW.d,1)+'</span></div>';
+ h+='</div><div class="box">🎯 เป้า 12 สัปดาห์: ไขมัน −5–6 กก. · กล้าม ≥ 28.5 กก. · ไขมันช่องท้อง &lt; 10<br>🍽️ 1,900–2,000 kcal/วัน · โปรตีน 140 ก. · กิน 12:00–20:00</div>';
+ $("sumBody").innerHTML=h; $("sumBody").className="";
+}
+
+/* ---------- calories ---------- */
+function renderCal(n){
+ document.querySelectorAll("#calRange button").forEach(function(b){b.classList.toggle("on",+b.dataset.n===n);});
+ var arr=rangeDays(D.exportLastFullDay,n), st=stat(arr);
+ $("calStats").innerHTML='<div class="kpi"><b>'+fmt(st.avg)+'</b><span>kcal/วัน เฉลี่ย ('+st.n+' วันที่มีข้อมูล)</span></div><div class="kpi"><b class="hi">'+st.hi.length+' วัน</b><span>ถึง 900 kcal · '+th(arr[0][0],1)+' – '+th(arr[arr.length-1][0],1)+'</span></div>';
+ var W=360,H=190,L=34,R=4,T=8,B=22,cw=W-L-R,chh=H-T-B;
+ var mx=Math.max(1200,Math.ceil(Math.max.apply(null,arr.map(function(x){return x[1]?x[1].k:0;}))/200)*200);
+ var y=function(v){return T+chh-(v/mx)*chh;}, bw=cw/arr.length;
+ var g='';
+ for(var v=0;v<=mx;v+=(mx>1600?400:200)){g+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y(v)+'" y2="'+y(v)+'" stroke="var(--bd)" stroke-width="0.6"/><text x="'+(L-3)+'" y="'+(y(v)+3)+'" font-size="8.5" text-anchor="end" fill="var(--mu)">'+fmt(v)+'</text>';}
+ arr.forEach(function(x,i){var X=L+i*bw;var gap=bw>3?bw*0.18:0;
+  if(!x[1]||!x[1].k){g+='<rect x="'+(X+gap/2)+'" y="'+(y(0)-2)+'" width="'+Math.max(bw-gap,0.5)+'" height="2" fill="var(--nd)"/>';return;}
+  g+='<rect data-i="'+i+'" x="'+(X+gap/2)+'" y="'+y(x[1].k)+'" width="'+Math.max(bw-gap,0.5)+'" height="'+(y(0)-y(x[1].k))+'" fill="'+(x[1].k>=HI?"var(--hi)":"var(--bar)")+'"/>';});
+ g+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y(HI)+'" y2="'+y(HI)+'" stroke="var(--hi)" stroke-dasharray="3 3" stroke-width="1"/><text x="'+(W-R)+'" y="'+(y(HI)-3)+'" font-size="8.5" text-anchor="end" fill="var(--hi)">900</text>';
+ if(st.n)g+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y(st.avg)+'" y2="'+y(st.avg)+'" stroke="var(--ac2)" stroke-width="1.4"/>';
+ var lab=n<=31?7:n<=92?14:60, step=Math.max(1,Math.round(lab));
+ for(var i=arr.length-1;i>=0;i-=step){g+='<text x="'+(i===arr.length-1?W-R:L+i*bw+bw/2)+'" y="'+(H-8)+'" font-size="8.5" text-anchor="'+(i===arr.length-1?"end":"middle")+'" fill="var(--mu)">'+th(arr[i][0])+'</text>';}
+ g+='<rect id="calHit" x="'+L+'" y="'+T+'" width="'+cw+'" height="'+chh+'" fill="transparent"/>';
+ var svg=$("calChart"); svg.innerHTML=g;
+ svg.onclick=svg.onpointermove=function(e){var r=svg.getBoundingClientRect();var px=(e.clientX-r.left)/r.width*W;var i=Math.floor((px-L)/bw);if(i<0||i>=arr.length)return;var x=arr[i];
+  $("calTip").innerHTML='<b>'+thw(x[0])+' '+pd(x[0]).getFullYear()+'</b> · '+(x[1]&&x[1].k?'<span class="'+(x[1].k>=HI?"hi":"")+'">'+fmt(x[1].k)+' kcal</span> · '+fmt(x[1].s)+' ก้าว · ออกกำลัง '+x[1].e+' นาที':'ไม่มีข้อมูล');};
+ var hs=st.hi.slice().reverse();
+ $("calList").innerHTML=hs.length?'<table><tr><th>วันที่</th><th class="r">kcal</th><th class="r">ก้าว</th><th>ออกกำลังกาย</th></tr>'+hs.map(function(x){var w=WO.filter(function(o){return o.d===x[0];}).map(function(o){return (TYPE[o.type]||o.type)+" "+Math.round(o.min)+"′";}).join(", ");return '<tr><td>'+thw(x[0])+' '+String(pd(x[0]).getFullYear()).slice(2)+'</td><td class="r hi">'+fmt(x[1].k)+'</td><td class="r">'+fmt(x[1].s)+'</td><td class="mu">'+esc(w||"–")+'</td></tr>';}).join("")+'</table>':'<p class="mu">ช่วงนี้ยังไม่มีวันที่ถึง 900 kcal</p>';
+}
+document.querySelectorAll("#calRange button").forEach(function(b){b.onclick=function(){$("calTip").textContent="แตะที่แท่งเพื่อดูค่า";renderCal(+b.dataset.n);};});
+
+/* ---------- averages ---------- */
+function renderAvg(m){
+ document.querySelectorAll("#avgMode button").forEach(function(b){b.classList.toggle("on",b.dataset.m===m);});
+ var G={};
+ D.daily.forEach(function(r){if(!r[1])return;var k=m==="w"?monday(r[0]):r[0].slice(0,7);(G[k]=G[k]||[]).push(r[1]);});
+ var keys=Object.keys(G).sort().reverse(); if(m==="w")keys=keys.slice(0,26);
+ var mx=Math.max.apply(null,keys.map(function(k){return G[k].reduce(function(a,b){return a+b;},0)/G[k].length;}));
+ $("avgTbl").innerHTML='<table><tr><th>'+(m==="w"?"สัปดาห์ (จ.–อา.)":"เดือน")+'</th><th class="r">วัน</th><th class="r">เฉลี่ย</th><th class="r">900+</th><th style="width:28%"></th></tr>'+keys.map(function(k){var a=G[k];var av=a.reduce(function(x,y){return x+y;},0)/a.length;var hi=a.filter(function(v){return v>=HI;}).length;
+  var lbl=m==="w"?th(k)+" – "+th(addD(k,6),1):MO[+k.slice(5)-1]+" "+k.slice(0,4);
+  return '<tr><td>'+lbl+'</td><td class="r">'+a.length+'</td><td class="r"><b>'+fmt(av)+'</b></td><td class="r'+(hi?' hi':'')+'">'+(hi||"–")+'</td><td><div class="bar" style="width:'+(av/mx*100).toFixed(1)+'%"></div></td></tr>';}).join("")+'</table>'+(m==="w"?'<p class="mu">แสดง 26 สัปดาห์ล่าสุดที่มีข้อมูล</p>':'');
+}
+document.querySelectorAll("#avgMode button").forEach(function(b){b.onclick=function(){renderAvg(b.dataset.m);};});
+
+/* ---------- body ---------- */
+function lineChart(svg,pts,unit,H){
+ var W=360,L=34,R=8,T=12,B=22,cw=W-L-R,chh=H-T-B;
+ if(!pts.length){svg.innerHTML='<text x="180" y="'+(H/2)+'" text-anchor="middle" font-size="12" fill="var(--mu)">ยังไม่มีข้อมูล</text>';return;}
+ var xs=pts.map(function(p){return pd(p.d).getTime();}),x0=Math.min.apply(null,xs),x1=Math.max.apply(null,xs);if(x1===x0){x0-=864e5*7;x1+=864e5*7;}
+ var vs=pts.map(function(p){return p.v;}),lo=Math.floor(Math.min.apply(null,vs)-1),hi=Math.ceil(Math.max.apply(null,vs)+1);
+ var X=function(t){return L+(t-x0)/(x1-x0)*cw;},Y=function(v){return T+chh-(v-lo)/(hi-lo)*chh;};
+ var g='',st=Math.max(1,Math.ceil((hi-lo)/5));
+ for(var v=lo;v<=hi;v+=st)g+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+Y(v)+'" y2="'+Y(v)+'" stroke="var(--bd)" stroke-width="0.6"/><text x="'+(L-3)+'" y="'+(Y(v)+3)+'" font-size="8.5" text-anchor="end" fill="var(--mu)">'+v+'</text>';
+ var srt=pts.slice().sort(function(a,b){return a.d<b.d?-1:1;});
+ g+='<polyline fill="none" stroke="var(--mu)" stroke-width="1" stroke-opacity=".6" points="'+srt.map(function(p){return X(pd(p.d).getTime())+","+Y(p.v);}).join(" ")+'"/>';
+ srt.forEach(function(p,i){var cx=X(pd(p.d).getTime()),cy=Y(p.v);g+='<circle cx="'+cx+'" cy="'+cy+'" r="3.6" fill="'+p.c+'"/>';if(i===srt.length-1||i===0)g+='<text x="'+Math.min(cx,W-R-14)+'" y="'+(cy-6)+'" font-size="8.5" text-anchor="middle" fill="var(--tx)">'+p.v+'</text>';});
+ g+='<text x="'+L+'" y="'+(H-7)+'" font-size="8.5" fill="var(--mu)">'+th(ds(new Date(x0)),1)+'</text><text x="'+(W-R)+'" y="'+(H-7)+'" font-size="8.5" text-anchor="end" fill="var(--mu)">'+th(ds(new Date(x1)),1)+'</text>';
+ svg.innerHTML=g;
+}
+function renderBody(){
+ var man=manual();
+ var wp=D.bodyMass.map(function(r){return {d:r[0],v:r[1],c:"var(--ac2)",s:"Apple Health"};})
+  .concat(D.inbody.map(function(r){return {d:r.date.slice(0,10),v:r.kg,c:"var(--ac)",s:"InBody"};}))
+  .concat(man.filter(function(x){return x.kg;}).map(function(x){return {d:x.d,v:x.kg,c:"var(--ok)",s:"บันทึกเอง"};}));
+ lineChart($("wChart"),wp,"กก.",170);
+ var wa=D.waist.map(function(r){return {d:r[0],v:r[1],c:"var(--ac2)"};}).concat(man.filter(function(x){return x.cm;}).map(function(x){return {d:x.d,v:x.cm,c:"var(--ok)"};}));
+ lineChart($("waChart"),wa,"ซม.",140);
+ $("waNote").textContent=(D.waist.length?"":"ใน Apple Health ยังไม่มีข้อมูลรอบเอว · ")+"วัดเองแล้วกรอกที่ “บันทึกเอง” (นัดเช็กเอว 7 ธ.ค.)";
+ var ib=D.inbody[D.inbody.length-1];
+ $("inbody").innerHTML=ib?'<h3>InBody ล่าสุด · '+th(ib.date.slice(0,10),1)+'</h3><table><tr><td>น้ำหนัก</td><td class="r">'+ib.kg+' กก.</td><td>กล้ามเนื้อ</td><td class="r">'+ib.smm+' กก.</td></tr><tr><td>ไขมัน</td><td class="r">'+ib.fatKg+' กก. ('+ib.pbf+'%)</td><td>ไขมันช่องท้อง</td><td class="r">ระดับ '+ib.visceral+'</td></tr><tr><td>เอว/สะโพก</td><td class="r">'+ib.whr+'</td><td>BMR</td><td class="r">'+fmt(ib.bmr)+' kcal</td></tr></table>':"";
+ var all=wp.slice().sort(function(a,b){return a.d<b.d?1:-1;});
+ $("bodyTbl").innerHTML='<table><tr><th>วันที่</th><th class="r">กก.</th><th>ที่มา</th></tr>'+all.map(function(p){return '<tr><td>'+th(p.d,1)+'</td><td class="r">'+p.v+'</td><td class="mu">'+p.s+'</td></tr>';}).join("")+'</table>';
+}
+
+/* ---------- workouts ---------- */
+var woShow=30;
+function initWo(){
+ var types={};WO.forEach(function(w){types[w.type]=(types[w.type]||0)+1;});
+ $("woType").innerHTML='<option value="">ทั้งหมด</option><option value="g:run">วิ่ง</option><option value="g:str">เวท/ฟังก์ชัน</option><option value="g:walk">เดิน</option>'+Object.keys(types).sort(function(a,b){return types[b]-types[a];}).map(function(t){return '<option value="'+t+'">'+(TYPE[t]||t)+' ('+types[t]+')</option>';}).join("");
+ var ys={};WO.forEach(function(w){ys[w.d.slice(0,4)]=1;});
+ $("woYear").innerHTML='<option value="90">90 วันล่าสุด</option><option value="">ทุกปี</option>'+Object.keys(ys).sort().reverse().map(function(y){return '<option value="y'+y+'">'+y+'</option>';}).join("");
+ $("woType").onchange=$("woYear").onchange=function(){woShow=30;renderWo();};
+ $("woMore").onclick=function(){woShow+=50;renderWo();};
+ renderWo();
+}
+function renderWo(){
+ var t=$("woType").value,y=$("woYear").value,cut=addD(TODAY,-90);
+ var L=WO.filter(function(w){if(t){if(t.indexOf("g:")===0){if(GROUP[t.slice(2)].indexOf(w.type)<0)return false;}else if(w.type!==t)return false;}
+  if(y==="90")return w.d>=cut; if(y)return w.d.slice(0,4)===y.slice(1); return true;});
+ var mins=L.reduce(function(a,w){return a+(w.min||0);},0),kc=L.reduce(function(a,w){return a+(w.kcal||0);},0),km=L.reduce(function(a,w){return a+(w.km||0);},0);
+ $("woSum").textContent=L.length+" ครั้ง · "+fmt(mins/60,1)+" ชม. · "+fmt(kc)+" kcal"+(km?" · "+fmt(km,1)+" กม.":"");
+ $("woTbl").innerHTML='<table><tr><th>วันที่</th><th>ประเภท</th><th class="r">นาที</th><th class="r">กม.</th><th class="r">HR<br>เฉลี่ย/สูง</th><th class="r">kcal</th></tr>'+L.slice(0,woShow).map(function(w){
+  return '<tr><td style="white-space:nowrap">'+thw(w.d)+'<div class="mu">'+(w.t||"")+' · '+pd(w.d).getFullYear()+'</div></td><td>'+(TYPE[w.type]||esc(w.type))+(w["in"]===1?' <span class="pill">ในร่ม</span>':'')+(w.src!=="watch"?' <span class="pill">'+SRC[w.src]+'</span>':'')+(w.note?'<div class="mu">'+esc(w.note)+'</div>':'')+'</td><td class="r">'+Math.round(w.min)+'</td><td class="r">'+(w.km?fmt(w.km,2):"–")+'</td><td class="r">'+(w.hr?w.hr+(w.hrmax?" / "+w.hrmax:""):"–")+'</td><td class="r">'+(w.kcal!=null?fmt(w.kcal):"–")+'</td></tr>';}).join("")+'</table>';
+ $("woMore").style.display=L.length>woShow?"":"none";
+}
+
+/* ---------- weekly plan ---------- */
+var wkOff=0;
+function runStep(wn){
+ if(wn<=3)return ["วิ่ง 1 / เดิน 1 นาที ×12","วิ่ง 1 / เดิน 1 นาที ×15"];
+ if(wn<=6)return ["วิ่ง 2 / เดิน 1 นาที ×10","วิ่ง 2 / เดิน 1 นาที ×13"];
+ if(wn<=9)return ["วิ่ง 4 / เดิน 1 นาที ×6","วิ่ง 4 / เดิน 1 นาที ×8"];
+ return ["วิ่งต่อเนื่อง 20–25 นาที","วิ่งต่อเนื่อง 30–40 นาที"];
+}
+function planFor(mon){
+ var wn=Math.floor((pd(mon)-pd(PLAN_START))/(7*864e5))+1;
+ var ab=(wn%2===1)?["A","B","A"]:["B","A","B"];
+ var sets=wn>=5?"4 เซ็ตท่าหลัก":"3 เซ็ต";
+ var r=runStep(Math.max(wn,1));
+ var lift=function(x){return {id:"lift",g:"str",t:"🏋️ เวท "+x+" (กับเทรนเนอร์) · "+sets+(x==="A"?" · มี pull-up":"")};};
+ var incl={id:"incl",g:"walk",t:"🚶 เดินชัน 15–20 นาที · ชัน 6–10% · 4.5–5.5 กม./ชม. · HR 110–126"};
+ return {wn:wn,days:[
+  [lift(ab[0]),incl],
+  [{id:"run",g:"run",t:"🏃 วิ่งสลับเดิน "+r[0]+" · HR ≤130 (เกินให้เดินจนลงถึง 120)"}],
+  [lift(ab[1]),incl],
+  [{id:"rest",g:"walk",t:"🧘 พัก หรือเดินเบา ๆ",opt:1}],
+  [lift(ab[2]),incl],
+  [{id:"long",g:"run",t:"🏃 วิ่งยาวสลับเดิน "+r[1]+" · HR ≤130"}],
+  [{id:"off",t:"😴 พักเต็มวัน"}]
+ ]};
+}
+function renderPlan(off){
+ wkOff=off; var mon=addD(monday(TODAY),7*off), P=planFor(mon), wk=isoWeek(mon), st=ls("kfit-wk-"+wk)||{};
+ var done=0,tot=0,h='';
+ P.days.forEach(function(items,i){var d=addD(mon,i);
+  var dw=WO.filter(function(w){return w.d===d;});
+  h+='<div class="day'+(d===TODAY?' today':'')+'"><div class="dh"><span>'+thw(d)+(d===TODAY?' · วันนี้':'')+'</span></div>';
+  items.forEach(function(it){var key=i+"-"+it.id;
+   var auto=it.g&&dw.some(function(w){return GROUP[it.g].indexOf(w.type)>=0;});
+   var on=key in st?st[key]:auto;
+   if(it.id!=="off"&&!it.opt){tot++;if(on)done++;}
+   h+='<label><input type="checkbox" data-k="'+key+'"'+(on?' checked':'')+'><span>'+it.t+(auto?' <span class="auto">✓ นาฬิกา</span>':'')+'</span></label>';});
+  if(dw.length)h+='<div class="mu" style="padding-left:28px">'+dw.map(function(w){return (TYPE[w.type]||w.type)+" "+Math.round(w.min)+" นาที"+(w.hr?" · HR "+w.hr:"")+(w.kcal?" · "+w.kcal+" kcal":"");}).join("<br>")+'</div>';
+  h+='</div>';});
+ $("wkDays").innerHTML=h;
+ var lbl=P.wn>=1&&P.wn<=12?"สัปดาห์ที่ "+P.wn+"/12":(P.wn<1?"ก่อนเริ่มแผน":"หลังจบ 12 สัปดาห์");
+ $("wkHead").innerHTML='<div class="box"><b>'+lbl+'</b> · '+th(mon)+' – '+th(addD(mon,6),1)+'<div class="prog"><i style="width:'+(tot?done/tot*100:0)+'%"></i></div>ทำแล้ว '+done+'/'+tot+' รายการ</div>';
+ $("wkDays").querySelectorAll("input").forEach(function(c){c.onchange=function(){st[c.dataset.k]=c.checked;ls("kfit-wk-"+wk,st);renderPlan(wkOff);};});
+}
+$("wkPrev").onclick=function(){renderPlan(wkOff-1);};$("wkNext").onclick=function(){renderPlan(wkOff+1);};$("wkNow").onclick=function(){renderPlan(0);};
+
+/* ---------- manual entries ---------- */
+function renderMan(){
+ var m=manual().slice().sort(function(a,b){return a.d<b.d?1:-1;});
+ $("manTbl").innerHTML=m.length?'<table><tr><th>วันที่</th><th class="r">กก.</th><th class="r">เอว ซม.</th><th></th></tr>'+m.map(function(x){return '<tr><td>'+thw(x.d)+' '+String(pd(x.d).getFullYear()).slice(2)+'</td><td class="r">'+(x.kg||"–")+'</td><td class="r">'+(x.cm||"–")+'</td><td class="r"><button class="del" data-d="'+x.d+'" aria-label="ลบ">🗑️</button></td></tr>';}).join("")+'</table>':'<p class="mu">ยังไม่มีรายการที่บันทึกเอง</p>';
+ $("manTbl").querySelectorAll(".del").forEach(function(b){b.onclick=function(){if(!confirm("ลบรายการ "+th(b.dataset.d,1)+" ?"))return;ls("kfit-body",manual().filter(function(x){return x.d!==b.dataset.d;}));refresh();};});
+}
+function refresh(){renderMan();renderBody();renderSum();}
+$("fD").value=TODAY;
+$("fAdd").onsubmit=function(e){e.preventDefault();var d=$("fD").value,kg=parseFloat($("fKg").value),cm=parseFloat($("fCm").value);
+ if(!d||(!(kg>0)&&!(cm>0))){$("fMsg").textContent="กรอกน้ำหนักหรือรอบเอวอย่างน้อย 1 ค่า";return;}
+ var m=manual().filter(function(x){return x.d!==d;}),old=manual().filter(function(x){return x.d===d;})[0]||{};
+ var r={d:d};if(kg>0)r.kg=Math.round(kg*100)/100;else if(old.kg)r.kg=old.kg;if(cm>0)r.cm=Math.round(cm*10)/10;else if(old.cm)r.cm=old.cm;
+ m.push(r);ls("kfit-body",m);$("fKg").value="";$("fCm").value="";$("fMsg").textContent="บันทึกแล้ว ✓ "+th(d,1);refresh();};
+$("bExp").onclick=function(){var o={app:"k-fit",ver:VER,exported:new Date().toISOString(),body:manual(),weeks:{}};
+ try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(k.indexOf("kfit-wk-")===0)o.weeks[k]=JSON.parse(localStorage.getItem(k));}}catch(e){}
+ var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(o,null,1)],{type:"application/json"}));a.download="k-fit-backup-"+TODAY+".json";document.body.appendChild(a);a.click();a.remove();};
+$("bImp").onchange=function(){var f=this.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){try{var o=JSON.parse(rd.result);if(!o||!Array.isArray(o.body))throw 0;
+ var M={};manual().forEach(function(x){M[x.d]=x;});o.body.forEach(function(x){if(x&&/^\d{4}-\d\d-\d\d$/.test(x.d))M[x.d]=Object.assign(M[x.d]||{},x);});
+ ls("kfit-body",Object.keys(M).map(function(k){return M[k];}));Object.keys(o.weeks||{}).forEach(function(k){if(k.indexOf("kfit-wk-")===0)ls(k,o.weeks[k]);});
+ $("fMsg").textContent="นำเข้าแล้ว ✓ "+o.body.length+" รายการ";refresh();renderPlan(wkOff);}catch(e){alert("ไฟล์ไม่ถูกต้อง");}};rd.readAsText(f);this.value="";};
+
+/* ---------- nav / mode / sw ---------- */
+if("IntersectionObserver" in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var id=e.target.id;
+ document.querySelectorAll("nav a").forEach(function(a){var on=a.getAttribute("href")==="#"+id;a.classList.toggle("on",on);if(on){var n=$("nav");n.scrollLeft=a.offsetLeft-n.clientWidth/2+a.clientWidth/2;}});}});},{rootMargin:"-60px 0px -70% 0px"});
+ document.querySelectorAll("main section").forEach(function(s){io.observe(s);});}
+function applyMode(m){var r=document.documentElement;r.classList.remove("dark","light");if(m)r.classList.add(m);}
+var saved=null;try{saved=localStorage.getItem("mode");}catch(e){}
+applyMode(saved);
+$("modeBtn").onclick=function(){var r=document.documentElement;var dark=r.classList.contains("dark")||(!r.classList.contains("light")&&matchMedia("(prefers-color-scheme: dark)").matches);var m=dark?"light":"dark";applyMode(m);try{localStorage.setItem("mode",m);}catch(e){}};
+load();
+if("serviceWorker" in navigator&&location.protocol!=="file:"){navigator.serviceWorker.register("sw.js").catch(function(){});}
+})();
+</script>
+</body>
+</html>

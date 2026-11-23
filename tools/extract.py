@@ -60,6 +60,20 @@ def load_curated():
             raise SystemExit("curated reported %s needs kg or cm" % r["d"])
     return bia, reported
 
+# Published series start on this Asia/Bangkok calendar date.
+START = "2026-11-01"
+
+def clip_published(data):
+    """Remove every dated row before START. The site publishes this file only."""
+    def day(row, key):
+        return row[0] if key is None else str(row.get(key, ""))[:10]
+    for key in ("daily", "bodyMass", "waist", "bodyFatPct", "rhr"):
+        data[key] = [r for r in data[key] if day(r, None) >= START]
+    for key, field in (("workouts", "d"), ("manual", "d"), ("bia", "d"), ("reported", "d"), ("inbody", "date")):
+        data[key] = [r for r in data[key] if day(r, field) >= START]
+    data["start"] = START
+    return data
+
 XML = sys.argv[1]
 DB = sys.argv[2] if len(sys.argv) > 2 else None
 
@@ -227,6 +241,7 @@ if DB:
         data["inbody"].append(dict(zip(["date","kg","smm","fatKg","pbf","visceral","whr","bmr","ffm","score","bmi"], r)))
 # Manual entries only for sessions not already present in this export.
 data["manual"] = []
+clip_published(data)
 sys.stderr.write("active sources: %s\n" % dict(src_active))
 sys.stderr.write("days=%d workouts=%d mass=%d waist=%d hr_samples=%d bia=%d reported=%d\n" % (len(daily), len(out_w), len(mass), len(waist), len(T), len(data["bia"]), len(data["reported"])))
 # cross-check with ActivitySummary

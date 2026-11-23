@@ -80,7 +80,7 @@ footer{text-align:center;color:var(--mu);font-size:12px;padding:16px 10px 40px}
 <header>
  <div class="top">
   <img class="logo" src="icons/icon-192.png" alt="">
-  <a class="ver" id="verLbl" href="#ver">v1.2 · 23 พ.ย. 2026</a>
+  <a class="ver" id="verLbl" href="#ver">v1.3 · 23 พ.ย. 2026</a>
   <button id="modeBtn" aria-label="สลับโหมดมืด">🌓</button>
  </div>
  <div class="site">K-Fit บันทึกฟิตเนส</div>
@@ -153,9 +153,10 @@ footer{text-align:center;color:var(--mu);font-size:12px;padding:16px 10px 40px}
 </section>
 
 <section id="ver"><h2>เวอร์ชัน</h2>
- <div class="box">ปัจจุบัน <b>v1.2</b> · กิจกรรม Apple Health ส่งออก 23 พ.ย. 2026 (ครบถึง 22 พ.ย.) · ตาชั่งบ้าน Zepp/Amazfit ถึงเช้า 23 พ.ย.</div>
+ <div class="box">ปัจจุบัน <b>v1.3</b> · ข้อมูลตั้งแต่ 1 พ.ย. 2026 (เวลาไทย) · กิจกรรมครบถึง 22 พ.ย. · ตาชั่งบ้านถึงเช้า 23 พ.ย.</div>
  <details><summary>บันทึกการเปลี่ยนแปลง</summary>
   <ul>
+   <li><b>v1.3 · 23 พ.ย. 2026</b> — ข้อมูลที่เผยแพร่เริ่ม 1 พ.ย. 2026 วันก่อนหน้านั้นถูกเอาออกจาก data.json</li>
    <li><b>v1.2 · 23 พ.ย. 2026</b> — น้ำหนัก ไขมัน BIA และ FFM จากตาชั่งบ้าน Zepp/Amazfit วันที่ 20–23 พ.ย. (เวลาไทยตอนชั่ง) · เอวที่รายงานเอง 23 พ.ย. 09:12 น. 37.5 นิ้ว · คงเส้นฐาน 16 พ.ย. เช้า 77.0 กก. / เอว 38 นิ้ว · ค่า BIA คนละวิธีกับ InBody 15 พ.ย. และ FFM คนละค่ากับกล้ามเนื้อโครงร่าง</li>
    <li><b>v1.1 · 23 พ.ย. 2026</b> — อัปเดตข้อมูล Apple Health ส่งออก 23 พ.ย. (ครบถึง 22 พ.ย.): แคลอรี่ ก้าว และการออกกำลังกายสัปดาห์ 16–22 พ.ย.</li>
    <li><b>v1.0 · 16 พ.ย. 2026</b> — เวอร์ชันแรก: กราฟแคลอรี่รายวัน (เน้นวัน 900+), ค่าเฉลี่ยรายสัปดาห์/เดือน, น้ำหนัก + InBody 15 พ.ย., บันทึกการออกกำลังกาย, ตารางซ้อม จ/พ/ศ เวท + เดินชัน, อ/ส วิ่งสลับเดิน, ฟอร์มบันทึกน้ำหนัก/เอว + สำรอง JSON, ใช้งานออฟไลน์ได้</li>
@@ -168,7 +169,7 @@ footer{text-align:center;color:var(--mu);font-size:12px;padding:16px 10px 40px}
 <script>
 (function(){
 "use strict";
-var VER="v1.2";
+var VER="v1.3";
 var MO=["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
 var DW=["อา.","จ.","อ.","พ.","พฤ.","ศ.","ส."];
 var HI=900, PLAN_START="2026-11-16";
@@ -204,7 +205,7 @@ function init(){
 }
 
 /* ---------- summary ---------- */
-function rangeDays(end,n){var out=[];for(var i=n-1;i>=0;i--){var d=addD(end,-i);out.push([d,DAY[d]]);}return out;}
+function rangeDays(end,n){var floor=D.start||"2026-11-01",start=addD(end,1-n);if(start<floor)start=floor;if(!end||start>end)return [];var out=[];for(var d=start;d<=end;d=addD(d,1))out.push([d,DAY[d]]);return out;}
 function stat(arr){var v=arr.filter(function(x){return x[1]&&x[1].k>0;});var s=v.reduce(function(a,x){return a+x[1].k;},0);return {n:v.length,avg:v.length?s/v.length:0,hi:v.filter(function(x){return x[1].k>=HI;})};}
 function renderSum(){
  var end=D.exportLastFullDay, s30=stat(rangeDays(end,30)), s60=stat(rangeDays(end,60));
@@ -240,7 +241,7 @@ function renderCal(n){
   g+='<rect data-i="'+i+'" x="'+(X+gap/2)+'" y="'+y(x[1].k)+'" width="'+Math.max(bw-gap,0.5)+'" height="'+(y(0)-y(x[1].k))+'" fill="'+(x[1].k>=HI?"var(--hi)":"var(--bar)")+'"/>';});
  g+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y(HI)+'" y2="'+y(HI)+'" stroke="var(--hi)" stroke-dasharray="3 3" stroke-width="1"/><text x="'+(W-R)+'" y="'+(y(HI)-3)+'" font-size="8.5" text-anchor="end" fill="var(--hi)">900</text>';
  if(st.n)g+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y(st.avg)+'" y2="'+y(st.avg)+'" stroke="var(--ac2)" stroke-width="1.4"/>';
- var lab=n<=31?7:n<=92?14:60, step=Math.max(1,Math.round(lab));
+ var lab=arr.length<=31?7:arr.length<=92?14:60, step=Math.max(1,Math.round(lab));
  for(var i=arr.length-1;i>=0;i-=step){g+='<text x="'+(i===arr.length-1?W-R:L+i*bw+bw/2)+'" y="'+(H-8)+'" font-size="8.5" text-anchor="'+(i===arr.length-1?"end":"middle")+'" fill="var(--mu)">'+th(arr[i][0])+'</text>';}
  g+='<rect id="calHit" x="'+L+'" y="'+T+'" width="'+cw+'" height="'+chh+'" fill="transparent"/>';
  var svg=$("calChart"); svg.innerHTML=g;
@@ -259,7 +260,8 @@ function renderAvg(m){
  var keys=Object.keys(G).sort().reverse(); if(m==="w")keys=keys.slice(0,26);
  var mx=Math.max.apply(null,keys.map(function(k){return G[k].reduce(function(a,b){return a+b;},0)/G[k].length;}));
  $("avgTbl").innerHTML='<table><tr><th>'+(m==="w"?"สัปดาห์ (จ.–อา.)":"เดือน")+'</th><th class="r">วัน</th><th class="r">เฉลี่ย</th><th class="r">900+</th><th style="width:28%"></th></tr>'+keys.map(function(k){var a=G[k];var av=a.reduce(function(x,y){return x+y;},0)/a.length;var hi=a.filter(function(v){return v>=HI;}).length;
-  var lbl=m==="w"?th(k)+" – "+th(addD(k,6),1):MO[+k.slice(5)-1]+" "+k.slice(0,4);
+  var from=k,to=addD(k,6);if(D.start){if(from<D.start)from=D.start;if(to<D.start)to=D.start;}
+  var lbl=m==="w"?th(from)+" – "+th(to,1):MO[+k.slice(5)-1]+" "+k.slice(0,4);
   return '<tr><td>'+lbl+'</td><td class="r">'+a.length+'</td><td class="r"><b>'+fmt(av)+'</b></td><td class="r'+(hi?' hi':'')+'">'+(hi||"–")+'</td><td><div class="bar" style="width:'+(av/mx*100).toFixed(1)+'%"></div></td></tr>';}).join("")+'</table>'+(m==="w"?'<p class="mu">แสดง 26 สัปดาห์ล่าสุดที่มีข้อมูล</p>':'');
 }
 document.querySelectorAll("#avgMode button").forEach(function(b){b.onclick=function(){renderAvg(b.dataset.m);};});
@@ -327,7 +329,7 @@ function initWo(){
  renderWo();
 }
 function renderWo(){
- var t=$("woType").value,y=$("woYear").value,cut=addD(TODAY,-90);
+ var t=$("woType").value,y=$("woYear").value,cut=addD(TODAY,-90);if(D.start&&cut<D.start)cut=D.start;
  var L=WO.filter(function(w){if(t){if(t.indexOf("g:")===0){if(GROUP[t.slice(2)].indexOf(w.type)<0)return false;}else if(w.type!==t)return false;}
   if(y==="90")return w.d>=cut; if(y)return w.d.slice(0,4)===y.slice(1); return true;});
  var mins=L.reduce(function(a,w){return a+(w.min||0);},0),kc=L.reduce(function(a,w){return a+(w.kcal||0);},0),km=L.reduce(function(a,w){return a+(w.km||0);},0);

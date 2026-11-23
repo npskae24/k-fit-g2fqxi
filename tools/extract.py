@@ -32,6 +32,7 @@ hr_t = array("q"); hr_v = array("f")
 asum = {}  # ActivitySummary for cross-check
 workouts = []
 src_active = defaultdict(int)
+export_date = None
 
 ctx = ET.iterparse(XML, events=("start", "end"))
 _, root = next(ctx)
@@ -40,7 +41,10 @@ for ev, el in ctx:
     if ev != "end":
         continue
     tag = el.tag
-    if tag == "Record":
+    if tag == "ExportDate":
+        export_date = el.get("value")
+        el.clear()
+    elif tag == "Record":
         t = el.get("type"); src = el.get("sourceName")
         if t == "HKQuantityTypeIdentifierHeartRate":
             if is_watch(src):
@@ -143,9 +147,19 @@ for d in days:
     st = steps_w.get(d) or steps_p.get(d) or 0
     daily.append([d, round(active.get(d, 0)), round(st), round(exmin.get(d, 0))])
 
+# Last complete calendar day in Asia/Bangkok: the day before ExportDate
+# unless the export itself was taken late evening (>= 21:00).
+if export_date:
+    exp_day = dt.date.fromisoformat(export_date[:10])
+    exp_hour = int(export_date[11:13])
+    last_full = (exp_day if exp_hour >= 21 else exp_day - dt.timedelta(days=1)).isoformat()
+else:
+    last_full = days[-1] if days else ""
+sys.stderr.write("exportDate=%s lastFullDay=%s\n" % (export_date, last_full))
+
 data = {
     "generated": dt.datetime.now().strftime("%Y-%m-%d %H:%M"),
-    "exportLastFullDay": "2026-11-14",
+    "exportLastFullDay": last_full,
     "dailyCols": ["date", "activeKcal", "steps", "exerciseMin"],
     "daily": daily,
     "workouts": out_w,
@@ -159,11 +173,8 @@ if DB:
     c = sqlite3.connect(f"file:{DB}?mode=ro", uri=True)
     for r in c.execute("select test_date,weight_kg,smm_kg,body_fat_kg,pbf_pct,visceral_level,whr,bmr_kcal,ffm_kg,score,bmi from inbody order by 1"):
         data["inbody"].append(dict(zip(["date","kg","smm","fatKg","pbf","visceral","whr","bmr","ffm","score","bmi"], r)))
-# Manual entries for days after the export (from K-Fitness check-ins)
-data["manual"] = [
-    {"d": "2026-11-16", "t": "07:00", "type": "FunctionalStrengthTraining", "min": 42.8, "kcal": 216, "note": "เวทกับเทรนเนอร์ (ฟังก์ชัน)"},
-    {"d": "2026-11-16", "t": "07:45", "type": "Walking", "min": 20, "km": 1.78, "kcal": 166, "hr": 125, "in": 1, "note": "เดินชัน 6% @4.5 กม./ชม."},
-]
+# Manual entries only for sessions not already present in this export.
+data["manual"] = []
 sys.stderr.write("active sources: %s\n" % dict(src_active))
 sys.stderr.write("days=%d workouts=%d mass=%d waist=%d hr_samples=%d\n" % (len(daily), len(out_w), len(mass), len(waist), len(T)))
 # cross-check with ActivitySummary

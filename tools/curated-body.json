@@ -1,0 +1,12 @@
+{
+  "bia": [
+    {"d": "2026-11-20", "tod": "morning", "tz": "Asia/Bangkok", "kg": 76.25, "pbf": 25.6, "ffm": 56.7, "src": "zepp-amazfit", "method": "home-bia"},
+    {"d": "2026-11-21", "tz": "Asia/Bangkok", "kg": 75.8, "pbf": 25.6, "ffm": 56.4, "src": "zepp-amazfit", "method": "home-bia", "pick": "last-of-two-same-weight"},
+    {"d": "2026-11-22", "tz": "Asia/Bangkok", "kg": 76.5, "pbf": 26.0, "ffm": 56.6, "src": "zepp-amazfit", "method": "home-bia"},
+    {"d": "2026-11-23", "t": "08:54:37", "tz": "Asia/Bangkok", "kg": 76.4, "bmi": 26.4, "pbf": 25.1, "ffm": 57.2, "src": "zepp-amazfit", "method": "home-bia"}
+  ],
+  "reported": [
+    {"d": "2026-11-16", "tod": "morning", "tz": "Asia/Bangkok", "kg": 77.0, "cm": 96.52, "inches": 38, "src": "manual", "kind": "baseline"},
+    {"d": "2026-11-23", "t": "09:12", "tz": "Asia/Bangkok", "cm": 95.25, "inches": 37.5, "src": "manual", "kind": "waist", "meal": "unknown"}
+  ]
+}

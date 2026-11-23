@@ -10,9 +10,9 @@
 <link rel="icon" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <style>
-:root{--bg:#f5f7f6;--card:#fff;--tx:#1b1f24;--mu:#5b6573;--ac:#e4572e;--ac2:#0f5c4a;--bd:#e3e6ea;--chip:#edf2f0;--ok:#1f9d6b;--hi:#e4572e;--bar:#7fb8a6;--nd:#d6dbe0;--warn:#fff4e5;--warnb:#f0b35a}
-@media (prefers-color-scheme:dark){:root:not(.light){--bg:#0f1413;--card:#18201e;--tx:#e8ecf0;--mu:#9aa6b2;--ac:#ff7a50;--ac2:#6fd3b2;--bd:#2a3532;--chip:#22302c;--ok:#3ccf91;--hi:#ff7a50;--bar:#3f8a74;--nd:#33403c;--warn:#2b2414;--warnb:#9a6a1c}}
-:root.dark{--bg:#0f1413;--card:#18201e;--tx:#e8ecf0;--mu:#9aa6b2;--ac:#ff7a50;--ac2:#6fd3b2;--bd:#2a3532;--chip:#22302c;--ok:#3ccf91;--hi:#ff7a50;--bar:#3f8a74;--nd:#33403c;--warn:#2b2414;--warnb:#9a6a1c}
+:root{--bg:#f5f7f6;--card:#fff;--tx:#1b1f24;--mu:#5b6573;--ac:#e4572e;--ac2:#0f5c4a;--bd:#e3e6ea;--chip:#edf2f0;--ok:#1f9d6b;--hi:#e4572e;--bar:#7fb8a6;--nd:#d6dbe0;--warn:#fff4e5;--warnb:#f0b35a;--bia:#1d6fbf}
+@media (prefers-color-scheme:dark){:root:not(.light){--bg:#0f1413;--card:#18201e;--tx:#e8ecf0;--mu:#9aa6b2;--ac:#ff7a50;--ac2:#6fd3b2;--bd:#2a3532;--chip:#22302c;--ok:#3ccf91;--hi:#ff7a50;--bar:#3f8a74;--nd:#33403c;--warn:#2b2414;--warnb:#9a6a1c;--bia:#79b4ff}}
+:root.dark{--bg:#0f1413;--card:#18201e;--tx:#e8ecf0;--mu:#9aa6b2;--ac:#ff7a50;--ac2:#6fd3b2;--bd:#2a3532;--chip:#22302c;--ok:#3ccf91;--hi:#ff7a50;--bar:#3f8a74;--nd:#33403c;--warn:#2b2414;--warnb:#9a6a1c;--bia:#79b4ff}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
@@ -80,7 +80,7 @@ footer{text-align:center;color:var(--mu);font-size:12px;padding:16px 10px 40px}
 <header>
  <div class="top">
   <img class="logo" src="icons/icon-192.png" alt="">
-  <a class="ver" id="verLbl" href="#ver">v1.1 · 23 พ.ย. 2026</a>
+  <a class="ver" id="verLbl" href="#ver">v1.2 · 23 พ.ย. 2026</a>
   <button id="modeBtn" aria-label="สลับโหมดมืด">🌓</button>
  </div>
  <div class="site">K-Fit บันทึกฟิตเนส</div>
@@ -116,10 +116,11 @@ footer{text-align:center;color:var(--mu);font-size:12px;padding:16px 10px 40px}
 
 <section id="body"><h2>น้ำหนัก และรอบเอว</h2>
  <svg class="ch" id="wChart" viewBox="0 0 360 170" role="img" aria-label="กราฟน้ำหนัก"></svg>
- <div class="lg"><span><i style="background:var(--ac2)"></i>Apple Health</span><span><i style="background:var(--ac)"></i>InBody</span><span><i style="background:var(--ok)"></i>บันทึกเอง</span></div>
+ <div class="lg"><span><i style="background:var(--ac2)"></i>Apple Health</span><span><i style="background:var(--bia)"></i>ตาชั่งบ้าน BIA</span><span><i style="background:var(--ac)"></i>InBody</span><span><i style="background:var(--ok)"></i>บันทึกเอง</span></div>
  <h3>รอบเอว (ซม.)</h3>
  <svg class="ch" id="waChart" viewBox="0 0 360 140" role="img" aria-label="กราฟรอบเอว"></svg>
  <div id="waNote" class="mu"></div>
+ <div id="biaBox"></div>
  <div id="inbody"></div>
  <details><summary>ตารางน้ำหนักทั้งหมด</summary><div class="tw" id="bodyTbl"></div></details>
 </section>
@@ -142,6 +143,7 @@ footer{text-align:center;color:var(--mu);font-size:12px;padding:16px 10px 40px}
    <label class="f">รอบเอว (ซม.)<input type="number" id="fCm" step="0.1" min="40" max="200" inputmode="decimal" placeholder="92"></label>
   </div>
   <p class="mu" style="margin:4px 0">ชั่งตอนตื่นนอน หลังเข้าห้องน้ำ ก่อนกินดื่ม · วัดเอวระดับสะดือ หายใจออกสบาย ๆ</p>
+  <p class="mu" style="margin:4px 0">ค่าตาชั่งบ้านและเส้นฐานที่เผยแพร่แสดงในหน้าน้ำหนัก/เอวอยู่แล้ว ไม่ต้องกรอกซ้ำ</p>
   <button class="btn pri" type="submit">บันทึก</button> <span id="fMsg" class="mu"></span>
  </form>
  <div class="tw" id="manTbl" style="margin-top:8px"></div>
@@ -151,9 +153,10 @@ footer{text-align:center;color:var(--mu);font-size:12px;padding:16px 10px 40px}
 </section>
 
 <section id="ver"><h2>เวอร์ชัน</h2>
- <div class="box">ปัจจุบัน <b>v1.1</b> · ข้อมูลจาก Apple Health ส่งออก 23 พ.ย. 2026 (ครบถึง 22 พ.ย.)</div>
+ <div class="box">ปัจจุบัน <b>v1.2</b> · กิจกรรม Apple Health ส่งออก 23 พ.ย. 2026 (ครบถึง 22 พ.ย.) · ตาชั่งบ้าน Zepp/Amazfit ถึงเช้า 23 พ.ย.</div>
  <details><summary>บันทึกการเปลี่ยนแปลง</summary>
   <ul>
+   <li><b>v1.2 · 23 พ.ย. 2026</b> — น้ำหนัก ไขมัน BIA และ FFM จากตาชั่งบ้าน Zepp/Amazfit วันที่ 20–23 พ.ย. (เวลาไทยตอนชั่ง) · เอวที่รายงานเอง 23 พ.ย. 09:12 น. 37.5 นิ้ว · คงเส้นฐาน 16 พ.ย. เช้า 77.0 กก. / เอว 38 นิ้ว · ค่า BIA คนละวิธีกับ InBody 15 พ.ย. และ FFM คนละค่ากับกล้ามเนื้อโครงร่าง</li>
    <li><b>v1.1 · 23 พ.ย. 2026</b> — อัปเดตข้อมูล Apple Health ส่งออก 23 พ.ย. (ครบถึง 22 พ.ย.): แคลอรี่ ก้าว และการออกกำลังกายสัปดาห์ 16–22 พ.ย.</li>
    <li><b>v1.0 · 16 พ.ย. 2026</b> — เวอร์ชันแรก: กราฟแคลอรี่รายวัน (เน้นวัน 900+), ค่าเฉลี่ยรายสัปดาห์/เดือน, น้ำหนัก + InBody 15 พ.ย., บันทึกการออกกำลังกาย, ตารางซ้อม จ/พ/ศ เวท + เดินชัน, อ/ส วิ่งสลับเดิน, ฟอร์มบันทึกน้ำหนัก/เอว + สำรอง JSON, ใช้งานออฟไลน์ได้</li>
   </ul>
@@ -165,7 +168,7 @@ footer{text-align:center;color:var(--mu);font-size:12px;padding:16px 10px 40px}
 <script>
 (function(){
 "use strict";
-var VER="v1.1";
+var VER="v1.2";
 var MO=["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
 var DW=["อา.","จ.","อ.","พ.","พฤ.","ศ.","ส."];
 var HI=900, PLAN_START="2026-11-16";
@@ -195,7 +198,8 @@ function init(){
  D.daily.forEach(function(r){DAY[r[0]]={k:r[1],s:r[2],e:r[3]};});
  WO=D.workouts.concat(D.manual.map(function(m){var x=Object.assign({},m);x.src="manual";return x;}));
  WO.sort(function(a,b){return (b.d+b.t)<(a.d+a.t)?-1:1;});
- $("hdrData").textContent="ข้อมูล Apple Watch "+th(D.daily[0][0],1)+" – "+th(D.exportLastFullDay,1)+" · ออกกำลังกาย "+fmt(D.workouts.length)+" ครั้ง";
+ var biaLast=(D.bia||[]).map(function(r){return r.d;}).sort().pop();
+ $("hdrData").textContent="ข้อมูล Apple Watch "+th(D.daily[0][0],1)+" – "+th(D.exportLastFullDay,1)+" · ออกกำลังกาย "+fmt(D.workouts.length)+" ครั้ง"+(biaLast?" · ตาชั่งบ้านถึง "+th(biaLast,1):"");
  renderSum(); renderCal(60); renderAvg("w"); renderBody(); initWo(); renderPlan(0); renderMan();
 }
 
@@ -211,9 +215,13 @@ function renderSum(){
   '<div class="kpi"><b>'+fmt(s30.avg)+'</b><span>kcal/วัน เฉลี่ย 30 วันล่าสุด</span></div>'+
   '<div class="kpi"><b>'+s60.hi.length+' วัน</b><span>ถึง 900 kcal ใน 60 วันล่าสุด</span></div>';
  if(ib)h+='<div class="kpi"><b>'+ib.kg+' กก.</b><span>InBody '+th(ib.date.slice(0,10),1)+' · ไขมัน '+ib.pbf+'%</span></div>'+
-  '<div class="kpi"><b>'+ib.smm+' กก.</b><span>กล้ามเนื้อ · ไขมันช่องท้องระดับ '+ib.visceral+'</span></div>';
- if(lastW)h+='<div class="kpi"><b>'+lastW.kg+' กก.</b><span>ล่าสุดที่บันทึกเอง '+th(lastW.d,1)+'</span></div>';
- h+='</div><div class="box">🎯 เป้า 12 สัปดาห์: ไขมัน −5–6 กก. · กล้าม ≥ 28.5 กก. · ไขมันช่องท้อง &lt; 10<br>🍽️ 1,900–2,000 kcal/วัน · โปรตีน 140 ก. · กิน 12:00–20:00</div>';
+  '<div class="kpi"><b>'+ib.smm+' กก.</b><span>กล้ามเนื้อโครงร่าง (SMM) · ไขมันช่องท้องระดับ '+ib.visceral+'</span></div>';
+ var sc=latestBia();
+ if(sc)h+='<div class="kpi"><b>'+num(sc.kg)+' กก.</b><span>ตาชั่งบ้าน '+whenOf(sc)+' · ไขมัน BIA '+num(sc.pbf)+'% · FFM '+num(sc.ffm)+' กก.</span></div>';
+ var wr=(D.reported||[]).filter(function(r){return r.cm!=null&&r.kind==="waist";}).sort(byDate);
+ if(wr.length){var w=wr[wr.length-1];h+='<div class="kpi"><b>'+num(w.cm)+' ซม.</b><span>เอวที่รายงาน '+whenOf(w)+' · '+w.inches+' นิ้ว'+(w.meal==="unknown"?" · จังหวะเทียบมื้ออาหารยังไม่ทราบ":"")+'</span></div>';}
+ if(lastW)h+='<div class="kpi"><b>'+num(lastW.kg)+' กก.</b><span>บันทึกในเครื่องนี้ '+th(lastW.d,1)+' · แสดงคู่กับข้อมูลที่เผยแพร่</span></div>';
+ h+='</div><div class="box">🎯 เป้า 12 สัปดาห์: ไขมัน −5–6 กก. · กล้าม (SMM) ≥ 28.5 กก. · ไขมันช่องท้อง &lt; 10<br>🍽️ 1,900–2,000 kcal/วัน · โปรตีน 140 ก. · กิน 12:00–20:00</div>';
  $("sumBody").innerHTML=h; $("sumBody").className="";
 }
 
@@ -265,25 +273,46 @@ function lineChart(svg,pts,unit,H){
  var X=function(t){return L+(t-x0)/(x1-x0)*cw;},Y=function(v){return T+chh-(v-lo)/(hi-lo)*chh;};
  var g='',st=Math.max(1,Math.ceil((hi-lo)/5));
  for(var v=lo;v<=hi;v+=st)g+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+Y(v)+'" y2="'+Y(v)+'" stroke="var(--bd)" stroke-width="0.6"/><text x="'+(L-3)+'" y="'+(Y(v)+3)+'" font-size="8.5" text-anchor="end" fill="var(--mu)">'+v+'</text>';
- var srt=pts.slice().sort(function(a,b){return a.d<b.d?-1:1;});
+ var srt=pts.slice().sort(function(a,b){if(a.d!==b.d)return a.d<b.d?-1:1;return (a.z||0)-(b.z||0);});
  g+='<polyline fill="none" stroke="var(--mu)" stroke-width="1" stroke-opacity=".6" points="'+srt.map(function(p){return X(pd(p.d).getTime())+","+Y(p.v);}).join(" ")+'"/>';
  srt.forEach(function(p,i){var cx=X(pd(p.d).getTime()),cy=Y(p.v);g+='<circle cx="'+cx+'" cy="'+cy+'" r="3.6" fill="'+p.c+'"/>';if(i===srt.length-1||i===0)g+='<text x="'+Math.min(cx,W-R-14)+'" y="'+(cy-6)+'" font-size="8.5" text-anchor="middle" fill="var(--tx)">'+p.v+'</text>';});
  g+='<text x="'+L+'" y="'+(H-7)+'" font-size="8.5" fill="var(--mu)">'+th(ds(new Date(x0)),1)+'</text><text x="'+(W-R)+'" y="'+(H-7)+'" font-size="8.5" text-anchor="end" fill="var(--mu)">'+th(ds(new Date(x1)),1)+'</text>';
  svg.innerHTML=g;
 }
+function byDate(a,b){if(a.d!==b.d)return a.d<b.d?-1:1;var ta=a.t||"",tb=b.t||"";return ta<tb?-1:ta>tb?1:0;}
+function num(v){var s=Number(v).toFixed(2);if(s.slice(-2)==="00")return Number(v).toFixed(1);if(s.slice(-1)==="0")return s.slice(0,-1);return s;}
+function whenOf(r){return th(r.d,1)+(r.t?" "+r.t:(r.tod==="morning"?" เช้า":""));}
+function latestBia(){var b=(D.bia||[]).filter(function(r){return r.kg!=null;}).sort(byDate);return b.length?b[b.length-1]:null;}
+function publishedKg(d){var v=[];(D.bia||[]).forEach(function(r){if(r.d===d&&r.kg!=null)v.push(+r.kg);});(D.reported||[]).forEach(function(r){if(r.d===d&&r.kg!=null)v.push(+r.kg);});D.bodyMass.forEach(function(r){if(r[0]===d)v.push(+r[1]);});D.inbody.forEach(function(r){if(r.date.slice(0,10)===d)v.push(+r.kg);});return v;}
+function publishedCm(d){var v=[];(D.waist||[]).forEach(function(r){if(r[0]===d)v.push(+r[1]);});(D.reported||[]).forEach(function(r){if(r.d===d&&r.cm!=null)v.push(+r.cm);});return v;}
+function sameNum(list,x){x=+x;for(var i=0;i<list.length;i++)if(list[i]===x)return true;return false;}
+function biaClock(r){if(r.t)return r.t;if(r.pick==="last-of-two-same-weight")return "ครั้งหลังของวัน";if(r.tod==="morning")return "เช้า";return "–";}
 function renderBody(){
  var man=manual();
- var wp=D.bodyMass.map(function(r){return {d:r[0],v:r[1],c:"var(--ac2)",s:"Apple Health"};})
-  .concat(D.inbody.map(function(r){return {d:r.date.slice(0,10),v:r.kg,c:"var(--ac)",s:"InBody"};}))
-  .concat(man.filter(function(x){return x.kg;}).map(function(x){return {d:x.d,v:x.kg,c:"var(--ok)",s:"บันทึกเอง"};}));
+ var wp=D.bodyMass.map(function(r){return {d:r[0],v:+r[1],c:"var(--ac2)",s:"Apple Health",z:2};})
+  .concat(D.inbody.map(function(r){return {d:r.date.slice(0,10),v:+r.kg,c:"var(--ac)",s:"InBody",z:3};}))
+  .concat((D.reported||[]).filter(function(r){return r.kg!=null;}).map(function(r){return {d:r.d,v:+r.kg,c:"var(--ok)",s:r.kind==="baseline"?"เส้นฐานวัดเอง":"รายงานเอง",z:4};}))
+  .concat((D.bia||[]).filter(function(r){return r.kg!=null;}).map(function(r){return {d:r.d,v:+r.kg,c:"var(--bia)",s:"ตาชั่งบ้าน BIA",z:5};}))
+  .concat(man.filter(function(x){return x.kg>0&&!sameNum(publishedKg(x.d),x.kg);}).map(function(x){return {d:x.d,v:+x.kg,c:"var(--ok)",s:"บันทึกในเครื่องนี้",z:1};}));
  lineChart($("wChart"),wp,"กก.",170);
- var wa=D.waist.map(function(r){return {d:r[0],v:r[1],c:"var(--ac2)"};}).concat(man.filter(function(x){return x.cm;}).map(function(x){return {d:x.d,v:x.cm,c:"var(--ok)"};}));
+ var wa=(D.waist||[]).map(function(r){return {d:r[0],v:+r[1],c:"var(--ac2)",z:2};})
+  .concat((D.reported||[]).filter(function(r){return r.cm!=null;}).map(function(r){return {d:r.d,v:+r.cm,c:"var(--ok)",z:4};}))
+  .concat(man.filter(function(x){return x.cm>0&&!sameNum(publishedCm(x.d),x.cm);}).map(function(x){return {d:x.d,v:+x.cm,c:"var(--ok)",z:1};}));
  lineChart($("waChart"),wa,"ซม.",140);
- $("waNote").textContent=(D.waist.length?"":"ใน Apple Health ยังไม่มีข้อมูลรอบเอว · ")+"วัดเองแล้วกรอกที่ “บันทึกเอง” (นัดเช็กเอว 7 ธ.ค.)";
+ var bits=(D.reported||[]).filter(function(r){return r.cm!=null;}).sort(byDate).map(function(r){
+  var who=r.kind==="baseline"?"เส้นฐานวัดเอง":"รายงานเอง";
+  return whenOf(r)+(r.kg!=null?" "+num(r.kg)+" กก. ·":"")+" "+num(r.cm)+" ซม."+(r.inches!=null?" ("+r.inches+" นิ้ว)":"")+" "+who+(r.meal==="unknown"?" · จังหวะเทียบมื้ออาหารยังไม่ทราบ":"");
+ });
+ if(!(D.waist||[]).length)bits.push("Apple Health ยังไม่มีรอบเอว");
+ bits.push("นัดเช็กเอว 7 ธ.ค.");
+ $("waNote").textContent=bits.join(" · ");
+ var rows=(D.bia||[]).slice().sort(byDate);
+ var pickNote=rows.filter(function(r){return r.pick==="last-of-two-same-weight";}).map(function(r){return th(r.d,1)+" ชั่งสองครั้งที่น้ำหนักเท่ากัน ตารางใช้ครั้งหลัง";}).join(" ");
+ $("biaBox").innerHTML=rows.length?'<h3>ตาชั่งบ้าน Zepp/Amazfit (BIA)</h3><p class="mu">วันและเวลาเป็นเวลาไทยตอนชั่ง ไม่ใช่วันที่แอปซิงก์</p><div class="warn">วิธีวัดคนละแบบกับ InBody · FFM คือมวลไร้ไขมันจากตาชั่งบ้าน คนละค่ากับกล้ามเนื้อโครงร่าง (SMM) · %ไขมัน BIA เทียบกับ InBody ไม่ได้</div><div class="tw"><table><tr><th>วันที่</th><th>เวลา</th><th class="r">กก.</th><th class="r">ไขมัน BIA</th><th class="r">FFM กก.</th><th class="r">BMI</th></tr>'+rows.map(function(r){return '<tr><td>'+th(r.d,1)+'</td><td>'+esc(biaClock(r))+'</td><td class="r">'+num(r.kg)+'</td><td class="r">'+num(r.pbf)+'%</td><td class="r">'+num(r.ffm)+'</td><td class="r">'+(r.bmi!=null?num(r.bmi):"–")+'</td></tr>';}).join("")+'</table></div>'+(pickNote?'<p class="mu">'+pickNote+'</p>':""):"";
  var ib=D.inbody[D.inbody.length-1];
- $("inbody").innerHTML=ib?'<h3>InBody ล่าสุด · '+th(ib.date.slice(0,10),1)+'</h3><table><tr><td>น้ำหนัก</td><td class="r">'+ib.kg+' กก.</td><td>กล้ามเนื้อ</td><td class="r">'+ib.smm+' กก.</td></tr><tr><td>ไขมัน</td><td class="r">'+ib.fatKg+' กก. ('+ib.pbf+'%)</td><td>ไขมันช่องท้อง</td><td class="r">ระดับ '+ib.visceral+'</td></tr><tr><td>เอว/สะโพก</td><td class="r">'+ib.whr+'</td><td>BMR</td><td class="r">'+fmt(ib.bmr)+' kcal</td></tr></table>':"";
- var all=wp.slice().sort(function(a,b){return a.d<b.d?1:-1;});
- $("bodyTbl").innerHTML='<table><tr><th>วันที่</th><th class="r">กก.</th><th>ที่มา</th></tr>'+all.map(function(p){return '<tr><td>'+th(p.d,1)+'</td><td class="r">'+p.v+'</td><td class="mu">'+p.s+'</td></tr>';}).join("")+'</table>';
+ $("inbody").innerHTML=ib?'<h3>InBody ล่าสุด · '+th(ib.date.slice(0,10),1)+'</h3><table><tr><td>น้ำหนัก</td><td class="r">'+ib.kg+' กก.</td><td>กล้ามเนื้อโครงร่าง (SMM)</td><td class="r">'+ib.smm+' กก.</td></tr><tr><td>ไขมัน</td><td class="r">'+ib.fatKg+' กก. ('+ib.pbf+'%)</td><td>ไขมันช่องท้อง</td><td class="r">ระดับ '+ib.visceral+'</td></tr><tr><td>เอว/สะโพก</td><td class="r">'+ib.whr+'</td><td>BMR</td><td class="r">'+fmt(ib.bmr)+' kcal</td></tr><tr><td>มวลไร้ไขมัน (FFM)</td><td class="r">'+ib.ffm+' กก.</td><td colspan="2" class="mu">ของ InBody คนละค่ากับ FFM ตาชั่งบ้าน</td></tr></table>':"";
+ var all=wp.slice().sort(function(a,b){if(a.d!==b.d)return a.d<b.d?1:-1;return (b.z||0)-(a.z||0);});
+ $("bodyTbl").innerHTML='<table><tr><th>วันที่</th><th class="r">กก.</th><th>ที่มา</th></tr>'+all.map(function(p){return '<tr><td>'+th(p.d,1)+'</td><td class="r">'+num(p.v)+'</td><td class="mu">'+p.s+'</td></tr>';}).join("")+'</table>';
 }
 
 /* ---------- workouts ---------- */

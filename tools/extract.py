@@ -4,11 +4,61 @@
 Usage: python3 tools/extract.py /path/to/export.xml [checkins.db] > data.json
 The site never needs the export itself; only data.json is published.
 No personal identifiers (names, device names, source names) are written out.
+Home-scale BIA and self-reported waist/baseline are copied from
+tools/curated-body.json. Those dates are Asia/Bangkok measurement dates
+and are not rewritten from a sync timestamp.
 """
-import sys, json, sqlite3, datetime as dt, bisect
+import sys, json, sqlite3, datetime as dt, bisect, os, re
 from array import array
 from collections import defaultdict
 import xml.etree.ElementTree as ET
+
+_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+_TIME = re.compile(r"^\d{2}:\d{2}(:\d{2})?$")
+
+def load_curated():
+    """Copy the whitelist of published body facts. Drop anything else."""
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "curated-body.json")
+    if not os.path.exists(path):
+        return [], []
+    with open(path, encoding="utf-8") as f:
+        extra = json.load(f)
+    if not isinstance(extra, dict):
+        raise SystemExit("curated-body.json must be an object")
+    unknown = set(extra) - {"bia", "reported"}
+    if unknown:
+        raise SystemExit("curated-body.json unexpected keys: %s" % sorted(unknown))
+    bia_keep = ("d", "t", "tz", "tod", "kg", "bmi", "pbf", "ffm", "src", "method", "pick")
+    rep_keep = ("d", "t", "tz", "tod", "kg", "cm", "inches", "src", "kind", "meal")
+
+    def take(rows, keep, need):
+        out = []
+        if not rows:
+            return out
+        if not isinstance(rows, list):
+            raise SystemExit("curated rows must be a list")
+        for r in rows:
+            if not isinstance(r, dict):
+                raise SystemExit("curated row must be an object")
+            bad = set(r) - set(keep)
+            if bad:
+                raise SystemExit("curated unexpected field %s" % sorted(bad))
+            if not _DATE.match(str(r.get("d", ""))):
+                raise SystemExit("curated bad date")
+            if "t" in r and not _TIME.match(str(r["t"])):
+                raise SystemExit("curated bad time on %s" % r["d"])
+            for k in need:
+                if k not in r:
+                    raise SystemExit("curated %s missing %s" % (r["d"], k))
+            out.append({k: r[k] for k in keep if k in r})
+        return out
+
+    bia = take(extra.get("bia"), bia_keep, ("d", "kg", "pbf", "ffm", "src", "method"))
+    reported = take(extra.get("reported"), rep_keep, ("d", "src", "kind"))
+    for r in reported:
+        if "kg" not in r and "cm" not in r:
+            raise SystemExit("curated reported %s needs kg or cm" % r["d"])
+    return bia, reported
 
 XML = sys.argv[1]
 DB = sys.argv[2] if len(sys.argv) > 2 else None
@@ -157,6 +207,7 @@ else:
     last_full = days[-1] if days else ""
 sys.stderr.write("exportDate=%s lastFullDay=%s\n" % (export_date, last_full))
 
+bia, reported = load_curated()
 data = {
     "generated": dt.datetime.now().strftime("%Y-%m-%d %H:%M"),
     "exportLastFullDay": last_full,
@@ -168,6 +219,7 @@ data = {
     "bodyFatPct": sorted(fatpct),
     "rhr": sorted([[d, v] for d, v in rhr.items()]),
     "inbody": [], "manual": [],
+    "bia": bia, "reported": reported,
 }
 if DB:
     c = sqlite3.connect(f"file:{DB}?mode=ro", uri=True)
@@ -176,7 +228,7 @@ if DB:
 # Manual entries only for sessions not already present in this export.
 data["manual"] = []
 sys.stderr.write("active sources: %s\n" % dict(src_active))
-sys.stderr.write("days=%d workouts=%d mass=%d waist=%d hr_samples=%d\n" % (len(daily), len(out_w), len(mass), len(waist), len(T)))
+sys.stderr.write("days=%d workouts=%d mass=%d waist=%d hr_samples=%d bia=%d reported=%d\n" % (len(daily), len(out_w), len(mass), len(waist), len(T), len(data["bia"]), len(data["reported"])))
 # cross-check with ActivitySummary
 diffs = [(d, round(active.get(d, 0)), round(v)) for d, v in asum.items() if "2026-09-16" <= d <= "2026-11-14" and abs(active.get(d, 0) - v) > 5]
 sys.stderr.write("ActivitySummary diffs Sep16-Nov14: %s\n" % diffs[:20])
